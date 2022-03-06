@@ -15,8 +15,7 @@
 #ifndef __I2C_H
 #define	__I2C_H
 
-#include <xc.h> // include processor files - each processor file is guarded.  
-#include <pic16f887.h>
+#include <xc.h> // include processor files - each processor file is guarded.
 #include <stdint.h>
 
 #ifndef _XTAL_FREQ

@@ -36,7 +36,7 @@ void I2C_Master_Wait()
 //*****************************************************************************
 // Función de inicio de la comunicación I2C PIC
 //*****************************************************************************
-void I2C_Master_Start()
+void I2C_Master_Start(void)
 {
     I2C_Master_Wait();      //espera que se cumplan las condiciones adecuadas
     SSPCON2bits.SEN = 1;    //inicia la comunicación i2c

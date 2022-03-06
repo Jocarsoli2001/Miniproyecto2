@@ -3,4 +3,5 @@ Maestro\ I2C.c  \
 I2C.h  \
 LCD.h  \
 Oscilador.h  \
-UART.h 
+UART.h  \
+MPU.h 

@@ -2866,10 +2866,10 @@ extern char * strrichr(const char *, int);
 
 
 # 1 "./I2C.h" 1
-# 20 "./I2C.h"
+# 19 "./I2C.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.32\\pic\\include\\c90\\stdint.h" 1 3
-# 20 "./I2C.h" 2
-# 29 "./I2C.h"
+# 19 "./I2C.h" 2
+# 28 "./I2C.h"
 void I2C_Master_Init(const unsigned long c);
 
 
@@ -2937,18 +2937,46 @@ void Config_USART(int baud_rate, int Freq);
 int Recibir_dato(int dato);
 void Mandar_dato(int dato);
 # 40 "Maestro I2C.c" 2
-# 50 "Maestro I2C.c"
-char val_giro = 0;
+
+# 1 "./MPU.h" 1
 
 
-char val_giro1[];
-char uni_giro = 0;
-char dec_giro = 0;
-char cen_giro = 0;
+# 1 "C:\\Program Files\\Microchip\\xc8\\v2.32\\pic\\include\\c90\\stdint.h" 1 3
+# 3 "./MPU.h" 2
+# 46 "./MPU.h"
+void InitMPU6050();
+# 41 "Maestro I2C.c" 2
+# 53 "Maestro I2C.c"
+int Ax = 0;
+int Ay = 0;
+int Az = 0;
+int Temp = 0;
+int Gx = 0;
+int Gy = 0;
+int Gz = 0;
+
+
+char Giro_digx[];
+char uni_x = 0;
+char dec_x = 0;
+char cen_x = 0;
+
+
+char Giro_digy[];
+char uni_y = 0;
+char dec_y = 0;
+char cen_y = 0;
+
+
+char Giro_digz[];
+char uni_z = 0;
+char dec_z = 0;
+char cen_z = 0;
 
 
 void setup(void);
 char tabla_numASCII(char a);
+void divisor_dec(uint8_t b, char dig1[]);
 
 
 
@@ -2961,20 +2989,48 @@ void __attribute__((picinterrupt(("")))) isr(void){
 
 void main(void) {
     setup();
-
     while(1){
 
 
 
         I2C_Master_Start();
-        I2C_Master_Write(0x68);
-        val_giro = I2C_Master_Read(0);
+        I2C_Master_Write(0x68 +0);
+        I2C_Master_Write(0x3B);
         I2C_Master_Stop();
-        _delay((unsigned long)((200)*(4000000/4000.0)));
+
+        I2C_Master_RepeatedStart();
+        I2C_Master_Write(0x68 +1);
+# 118 "Maestro I2C.c"
+        Ax = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Ay = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Az = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Temp = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Gx = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Gy = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Gz = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(1);
+
+        I2C_Master_Stop();
 
 
 
 
+
+
+        divisor_dec(Gx,Giro_digx);
+
+
+        uni_x = tabla_numASCII(Giro_digx[0]);
+        dec_x = tabla_numASCII(Giro_digx[1]);
+        cen_x = tabla_numASCII(Giro_digx[2]);
+
+
+        set_cursor(1,0);
+        Escribir_stringLCD("X:    Y:     S:");
+
+        set_cursor(2,0);
+        Escribir_caracterLCD(cen_x);
+        Escribir_caracterLCD(dec_x);
+        Escribir_caracterLCD(uni_x);
 
     }
 }
@@ -2998,29 +3054,22 @@ void setup(void){
     PORTC = 0;
 
 
-    TRISC2 = 0;
-    PORTCbits.RC2 = 1;
-
-    TRISC1 = 0;
-    PORTCbits.RC1 = 1;
-
-    TRISC0 = 0;
-    PORTCbits.RC0 = 1;
-
-
     initOsc(4);
 
 
     I2C_Master_Init(100000);
 
 
+    InitMPU6050();
+
+
     Iniciar_LCD();
     Limpiar_pantallaLCD();
     set_cursor(1,0);
-    Escribir_stringLCD("Hola");
+    Escribir_stringLCD("Miniproyecto 2");
     set_cursor(2,2);
     Escribir_stringLCD("Jose Santizo");
-    _delay((unsigned long)((5000)*(4000000/4000.0)));
+    _delay((unsigned long)((5000)*(8000000/4000.0)));
     Limpiar_pantallaLCD();
 
 
@@ -3028,6 +3077,12 @@ void setup(void){
 
 }
 
+void divisor_dec(uint8_t b, char dig1[]){
+    for(int n = 0; n<3 ; n++){
+        dig1[n] = b % 10;
+        b = (b - dig1[n])/10;
+    }
+}
 
 char tabla_numASCII(char a){
     switch(a){

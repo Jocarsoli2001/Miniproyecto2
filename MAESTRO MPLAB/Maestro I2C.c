@@ -38,26 +38,48 @@
 #include "LCD.h"
 #include "Oscilador.h"
 #include "UART.h"
+#include "MPU.h"
 
 //-----------------Definición de frecuencia de cristal---------------
-#define _XTAL_FREQ 4000000
+#define _XTAL_FREQ 8000000
 
 //-----------------------Constantes----------------------------------
-#define Giroscopio 0x68                             // Constante que lleva la dirección del sensor (giroscopio)
+#define IMU 0x68                                    // Dirección de la IMU + 1 cero (LSb)
 #define PIC_esclavo 0x50                            // Constante que lleva la dirección del PIC esclavo
 
 //-----------------------Variables------------------------------------
-char val_giro = 0;                                  // Variable que guarda valor de giroscopio
 
-// variables para valor del giroscopio
-char val_giro1[];
-char uni_giro = 0;
-char dec_giro = 0;
-char cen_giro = 0;
+//Variables para giroscopio
+int Ax = 0;                                         // Aceleración sobre eje X de acelerómetro
+int Ay = 0;                                         // Aceleración sobre eje Y de acelerómetro
+int Az = 0;                                         // Aceleración sobre eje Z de acelerómetro
+int Temp = 0;                                       // Temperatura medida por IMU
+int Gx = 0;                                         // Medición del giroscopio sobre eje X 
+int Gy = 0;                                         // Medición del giroscopio sobre eje Y
+int Gz = 0;                                         // Medición del giroscopio sobre eje Z
+
+//Variables para valores en LCD (eje x)
+char Giro_digx[];
+char uni_x = 0;
+char dec_x = 0;
+char cen_x = 0;
+
+//Variables para valores en LCD (eje y)
+char Giro_digy[];
+char uni_y = 0;
+char dec_y = 0;
+char cen_y = 0;
+
+//Variables para valores en LCD (eje z)
+char Giro_digz[];
+char uni_z = 0;
+char dec_z = 0;
+char cen_z = 0;
 
 //------------Funciones sin retorno de variables----------------------
 void setup(void);                                   // Función de setup
 char tabla_numASCII(char a);                        // Función para pasar un caracter a su equivalente en ASCII
+void divisor_dec(uint8_t b, char dig1[]);           // Función para dividir valores en sus dígitos decimales
 
 //-------------Funciones que retornan variables-----------------------
 
@@ -70,21 +92,60 @@ void __interrupt() isr(void){
 //----------------------Main Loop--------------------------------
 void main(void) {
     setup();                                        // Contiene todas las subrutinas de configuración
-    
     while(1){
         //---------------------------------------------------------------------- 
         // COMUNICACIÓN I2C CON GIROSCOPIO
         //----------------------------------------------------------------------
-        I2C_Master_Start();                         // Comenzar comunicación I2C
-        I2C_Master_Write(Giroscopio);               // Comenzar comunicación con Giroscopio
-        val_giro = I2C_Master_Read(0);
+        I2C_Master_Start();
+        I2C_Master_Write(IMU+0);                        // Slave: IMU | Operación: Write (+0)
+        I2C_Master_Write(ACCEL_XOUT_H);                 // CMD: Selección de registro inicial = ACCEL_XOUT_H 
         I2C_Master_Stop();
-        __delay_ms(200);
+        
+        I2C_Master_RepeatedStart();                     // Inicio de lectura continua
+        I2C_Master_Write(IMU+1);                        // Slave: IMU | Operación: Read (+1)
+        
+        // Lectura de giroscopio
+        // NOTA: Se realizará una lectura continua de todos los valores que devuelve el IMU. El IMU
+        // retorna 7 valores distintos en 14 registros diferentes, por lo que será necesario
+        // hacer las lecturas continuas y concatenar valores en 7 diferentes variables. No se estará
+        // mandando el bit de acknowledge cada vez que se realiza un lectura, ya que de esa forma
+        // el IMU cambiará de registro y en cada lectura se obtiene un valor distinto. El único momento
+        // donde se enviará el bit de acknowledge es en la última lectura, ya que acá ya no queremos recibir
+        // más valores.
         
         
+        // Bits más significativos<<8 + Menos significativos
+        Ax = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);       
+        Ay = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Az = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Temp = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Gx = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Gy = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
+        Gz = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(1);
         
-       
-       
+        I2C_Master_Stop();                              // Fin del "burst read" o lectura continua
+        
+        //---------------------------------------------------------------------- 
+        // IMPRIMIR VALORES A LCD
+        //----------------------------------------------------------------------
+        
+        // Divisor de valores en dígitos
+        divisor_dec(Gx,Giro_digx);                      // Divide el valor leído por el osciloscopio en 
+        
+        // Paso de valores a ASCII            
+        uni_x = tabla_numASCII(Giro_digx[0]);
+        dec_x = tabla_numASCII(Giro_digx[1]);
+        cen_x = tabla_numASCII(Giro_digx[2]);
+        
+        // Escritura de los valores en LCD
+        set_cursor(1,0);
+        Escribir_stringLCD("X:    Y:     S:");          // X en pos 0, Y en pos 7 y Z en pos 14
+        
+        set_cursor(2,0);
+        Escribir_caracterLCD(cen_x);                    // Se escriben todos los valores en las posiciones correspondientes a la LCD
+        Escribir_caracterLCD(dec_x);
+        Escribir_caracterLCD(uni_x);
+        
     }
 }
 
@@ -106,27 +167,20 @@ void setup(void){
     PORTB = 0;                                      // Limpiar PORTB
     PORTC = 0;
     
-    //Configuración de Pin de slave select
-    TRISC2 = 0;                                     // RC2 como pin para seleccionar esclavo
-    PORTCbits.RC2 = 1;                              // RC2 se activa para que el pin RC5 del esclavo 1 lo niegue y esté deseleccionado el mismo
-    
-    TRISC1 = 0;
-    PORTCbits.RC1 = 1;
-    
-    TRISC0 = 0;
-    PORTCbits.RC0 = 1;
-    
     //Configuración de oscilador
     initOsc(_4MHz);                                 // Oscilador a 4 mega hertz
     
     //Configuración de I2C
     I2C_Master_Init(100000);
     
-    // Configuración LCD
-    Iniciar_LCD();                                   // Se inicializa la LCD en 8 bits
+    //Inicialización y configuración de MPU6065
+    InitMPU6050();
+    
+    // Configuración e inicialización de LCD
+    Iniciar_LCD();                                  // Se inicializa la LCD en 8 bits
     Limpiar_pantallaLCD();
     set_cursor(1,0);
-    Escribir_stringLCD("Hola");
+    Escribir_stringLCD("Miniproyecto 2");
     set_cursor(2,2);
     Escribir_stringLCD("Jose Santizo");
     __delay_ms(5000);
@@ -137,6 +191,12 @@ void setup(void){
     
 }
 
+void divisor_dec(uint8_t b, char dig1[]){            // Divide un número para obtener sus dígitos decimales
+    for(int n = 0; n<3 ; n++){                      // De i = 0 hasta i = 2
+        dig1[n] = b % 10;                            // array[i] = cont_vol mod 10(retornar residuo). Devuelve digito por dígito de un número decimal.
+        b = (b - dig1[n])/10;                        // a = valor sin último digito.
+    }
+}
 
 char tabla_numASCII(char a){
     switch(a){
