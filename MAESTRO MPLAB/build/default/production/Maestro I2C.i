@@ -3000,6 +3000,7 @@ char uni_z = 0;
 char dec_z = 0;
 char cen_z = 0;
 
+char output = 0;
 
 void setup(void);
 char tabla_numASCII(char a);
@@ -3024,18 +3025,19 @@ void main(void) {
         I2CMasterWrite(0b11010010 +0);
         I2CMasterWrite(0x3B);
 
-        I2C_Master_Start(Repeated);
+        I2C_Master_Start(Standard);
         I2CMasterWrite(0b11010010 +1);
-# 116 "Maestro I2C.c"
-        Ax = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Ay = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Az = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Temp = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Gx = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Gy = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Gz = (I2CMasterRead(ACK)<<8) | I2CMasterRead(NACK);
+# 121 "Maestro I2C.c"
+        Ax = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Ay = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Az = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Temp = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Gx = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Gy = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Gz = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(NACK);
 
         I2CMasterStop();
+        _delay((unsigned long)((10)*(8000000/4000.0)));
 
 
 
@@ -3083,9 +3085,11 @@ void setup(void){
 
     TRISA = 0;
     TRISB = 0;
+    TRISD = 0;
 
     PORTA = 0;
     PORTB = 0;
+    PORTD = 0;
 
 
     initOsc(4);
@@ -3108,7 +3112,7 @@ void setup(void){
     Limpiar_pantallaLCD();
 
 
-
+    Config_USART(9600,4);
 
 }
 

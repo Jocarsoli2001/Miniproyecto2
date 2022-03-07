@@ -3,17 +3,17 @@
 [d edition pro ]
 [d chip 16F887 ]
 [d frameptr 0 ]
-"98 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\Maestro I2C.c
+"99 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\Maestro I2C.c
 [e E1570 . `uc
 Standard 1
 Repeated 0
 ]
-"116
+"121
 [e E1574 . `uc
 ACK 0
 NACK 1
 ]
-"181
+"189
 [e E1557 . `uc
 SPI_MASTER_FOSC4 0
 SPI_MASTER_FOSC16 1
@@ -96,25 +96,27 @@ Repeated 0
 [v _Limpiar_pantallaLCD Limpiar_pantallaLCD `(v  1 e 1 0 ]
 "77
 [v _set_cursor set_cursor `(v  1 e 1 0 ]
-"86 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\Maestro I2C.c
+"87 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\Maestro I2C.c
 [v _isr isr `II(v  1 e 1 0 ]
-"92
+"93
 [v _main main `(v  1 e 1 0 ]
-"164
+"170
 [v _setup setup `(v  1 e 1 0 ]
-"201
+"209
 [v _divisor_dec divisor_dec `(v  1 e 1 0 ]
-"208
+"216
 [v _tabla_numASCII tabla_numASCII `(uc  1 e 1 0 ]
 "13 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\MPU.c
 [v _InitMPU6050 InitMPU6050 `(v  1 e 1 0 ]
 "12 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\Oscilador.c
 [v _initOsc initOsc `(v  1 e 1 0 ]
+"13 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\UART.c
+[v _Config_USART Config_USART `(v  1 e 1 0 ]
 "166 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h
 [v _PORTA PORTA `VEuc  1 e 1 @5 ]
 "228
 [v _PORTB PORTB `VEuc  1 e 1 @6 ]
-[s S509 . 1 `uc 1 RB0 1 0 :1:0 
+[s S518 . 1 `uc 1 RB0 1 0 :1:0 
 `uc 1 RB1 1 0 :1:1 
 `uc 1 RB2 1 0 :1:2 
 `uc 1 RB3 1 0 :1:3 
@@ -124,9 +126,11 @@ Repeated 0
 `uc 1 RB7 1 0 :1:7 
 ]
 "245
-[u S518 . 1 `S509 1 . 1 0 ]
-[v _PORTBbits PORTBbits `VES518  1 e 1 @6 ]
-[s S486 . 1 `uc 1 RD0 1 0 :1:0 
+[u S527 . 1 `S518 1 . 1 0 ]
+[v _PORTBbits PORTBbits `VES527  1 e 1 @6 ]
+"352
+[v _PORTD PORTD `VEuc  1 e 1 @8 ]
+[s S495 . 1 `uc 1 RD0 1 0 :1:0 
 `uc 1 RD1 1 0 :1:1 
 `uc 1 RD2 1 0 :1:2 
 `uc 1 RD3 1 0 :1:3 
@@ -136,9 +140,9 @@ Repeated 0
 `uc 1 RD7 1 0 :1:7 
 ]
 "369
-[u S495 . 1 `S486 1 . 1 0 ]
-[v _PORTDbits PORTDbits `VES495  1 e 1 @8 ]
-[s S380 . 1 `uc 1 RBIF 1 0 :1:0 
+[u S504 . 1 `S495 1 . 1 0 ]
+[v _PORTDbits PORTDbits `VES504  1 e 1 @8 ]
+[s S389 . 1 `uc 1 RBIF 1 0 :1:0 
 `uc 1 INTF 1 0 :1:1 
 `uc 1 T0IF 1 0 :1:2 
 `uc 1 RBIE 1 0 :1:3 
@@ -148,32 +152,32 @@ Repeated 0
 `uc 1 GIE 1 0 :1:7 
 ]
 "482
-[s S389 . 1 `uc 1 . 1 0 :2:0 
+[s S398 . 1 `uc 1 . 1 0 :2:0 
 `uc 1 TMR0IF 1 0 :1:2 
 `uc 1 . 1 0 :2:3 
 `uc 1 TMR0IE 1 0 :1:5 
 ]
-[u S394 . 1 `S380 1 . 1 0 `S389 1 . 1 0 ]
-[v _INTCONbits INTCONbits `VES394  1 e 1 @11 ]
+[u S403 . 1 `S389 1 . 1 0 `S398 1 . 1 0 ]
+[v _INTCONbits INTCONbits `VES403  1 e 1 @11 ]
 "843
 [v _SSPBUF SSPBUF `VEuc  1 e 1 @19 ]
 "850
 [v _SSPCON SSPCON `VEuc  1 e 1 @20 ]
-[s S176 . 1 `uc 1 SSPM 1 0 :4:0 
+[s S185 . 1 `uc 1 SSPM 1 0 :4:0 
 `uc 1 CKP 1 0 :1:4 
 `uc 1 SSPEN 1 0 :1:5 
 `uc 1 SSPOV 1 0 :1:6 
 `uc 1 WCOL 1 0 :1:7 
 ]
 "870
-[s S182 . 1 `uc 1 SSPM0 1 0 :1:0 
+[s S191 . 1 `uc 1 SSPM0 1 0 :1:0 
 `uc 1 SSPM1 1 0 :1:1 
 `uc 1 SSPM2 1 0 :1:2 
 `uc 1 SSPM3 1 0 :1:3 
 ]
-[u S187 . 1 `S176 1 . 1 0 `S182 1 . 1 0 ]
-[v _SSPCONbits SSPCONbits `VES187  1 e 1 @20 ]
-[s S658 . 1 `uc 1 RX9D 1 0 :1:0 
+[u S196 . 1 `S185 1 . 1 0 `S191 1 . 1 0 ]
+[v _SSPCONbits SSPCONbits `VES196  1 e 1 @20 ]
+[s S667 . 1 `uc 1 RX9D 1 0 :1:0 
 `uc 1 OERR 1 0 :1:1 
 `uc 1 FERR 1 0 :1:2 
 `uc 1 ADDEN 1 0 :1:3 
@@ -183,21 +187,21 @@ Repeated 0
 `uc 1 SPEN 1 0 :1:7 
 ]
 "1068
-[s S667 . 1 `uc 1 RCD8 1 0 :1:0 
+[s S676 . 1 `uc 1 RCD8 1 0 :1:0 
 `uc 1 . 1 0 :5:1 
 `uc 1 RC9 1 0 :1:6 
 ]
-[s S671 . 1 `uc 1 . 1 0 :6:0 
+[s S680 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 nRC8 1 0 :1:6 
 ]
-[s S674 . 1 `uc 1 . 1 0 :6:0 
+[s S683 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 RC8_9 1 0 :1:6 
 ]
-[u S677 . 1 `S658 1 . 1 0 `S667 1 . 1 0 `S671 1 . 1 0 `S674 1 . 1 0 ]
-[v _RCSTAbits RCSTAbits `VES677  1 e 1 @24 ]
+[u S686 . 1 `S667 1 . 1 0 `S676 1 . 1 0 `S680 1 . 1 0 `S683 1 . 1 0 ]
+[v _RCSTAbits RCSTAbits `VES686  1 e 1 @24 ]
 "1416
 [v _TRISA TRISA `VEuc  1 e 1 @133 ]
-[s S225 . 1 `uc 1 TRISA0 1 0 :1:0 
+[s S234 . 1 `uc 1 TRISA0 1 0 :1:0 
 `uc 1 TRISA1 1 0 :1:1 
 `uc 1 TRISA2 1 0 :1:2 
 `uc 1 TRISA3 1 0 :1:3 
@@ -207,11 +211,11 @@ Repeated 0
 `uc 1 TRISA7 1 0 :1:7 
 ]
 "1433
-[u S234 . 1 `S225 1 . 1 0 ]
-[v _TRISAbits TRISAbits `VES234  1 e 1 @133 ]
+[u S243 . 1 `S234 1 . 1 0 ]
+[v _TRISAbits TRISAbits `VES243  1 e 1 @133 ]
 "1478
 [v _TRISB TRISB `VEuc  1 e 1 @134 ]
-[s S204 . 1 `uc 1 TRISC0 1 0 :1:0 
+[s S213 . 1 `uc 1 TRISC0 1 0 :1:0 
 `uc 1 TRISC1 1 0 :1:1 
 `uc 1 TRISC2 1 0 :1:2 
 `uc 1 TRISC3 1 0 :1:3 
@@ -221,9 +225,11 @@ Repeated 0
 `uc 1 TRISC7 1 0 :1:7 
 ]
 "1557
-[u S213 . 1 `S204 1 . 1 0 ]
-[v _TRISCbits TRISCbits `VES213  1 e 1 @135 ]
-[s S340 . 1 `uc 1 TMR1IE 1 0 :1:0 
+[u S222 . 1 `S213 1 . 1 0 ]
+[v _TRISCbits TRISCbits `VES222  1 e 1 @135 ]
+"1602
+[v _TRISD TRISD `VEuc  1 e 1 @136 ]
+[s S349 . 1 `uc 1 TMR1IE 1 0 :1:0 
 `uc 1 TMR2IE 1 0 :1:1 
 `uc 1 CCP1IE 1 0 :1:2 
 `uc 1 SSPIE 1 0 :1:3 
@@ -232,25 +238,25 @@ Repeated 0
 `uc 1 ADIE 1 0 :1:6 
 ]
 "1718
-[u S348 . 1 `S340 1 . 1 0 ]
-[v _PIE1bits PIE1bits `VES348  1 e 1 @140 ]
-[s S561 . 1 `uc 1 SCS 1 0 :1:0 
+[u S357 . 1 `S349 1 . 1 0 ]
+[v _PIE1bits PIE1bits `VES357  1 e 1 @140 ]
+[s S570 . 1 `uc 1 SCS 1 0 :1:0 
 `uc 1 LTS 1 0 :1:1 
 `uc 1 HTS 1 0 :1:2 
 `uc 1 OSTS 1 0 :1:3 
 `uc 1 IRCF 1 0 :3:4 
 ]
 "1882
-[s S567 . 1 `uc 1 . 1 0 :4:0 
+[s S576 . 1 `uc 1 . 1 0 :4:0 
 `uc 1 IRCF0 1 0 :1:4 
 `uc 1 IRCF1 1 0 :1:5 
 `uc 1 IRCF2 1 0 :1:6 
 ]
-[u S572 . 1 `S561 1 . 1 0 `S567 1 . 1 0 ]
-[v _OSCCONbits OSCCONbits `VES572  1 e 1 @143 ]
+[u S581 . 1 `S570 1 . 1 0 `S576 1 . 1 0 ]
+[v _OSCCONbits OSCCONbits `VES581  1 e 1 @143 ]
 "1979
 [v _SSPCON2 SSPCON2 `VEuc  1 e 1 @145 ]
-[s S359 . 1 `uc 1 SEN 1 0 :1:0 
+[s S368 . 1 `uc 1 SEN 1 0 :1:0 
 `uc 1 RSEN 1 0 :1:1 
 `uc 1 PEN 1 0 :1:2 
 `uc 1 RCEN 1 0 :1:3 
@@ -260,13 +266,13 @@ Repeated 0
 `uc 1 GCEN 1 0 :1:7 
 ]
 "1996
-[u S368 . 1 `S359 1 . 1 0 ]
-[v _SSPCON2bits SSPCON2bits `VES368  1 e 1 @145 ]
+[u S377 . 1 `S368 1 . 1 0 ]
+[v _SSPCON2bits SSPCON2bits `VES377  1 e 1 @145 ]
 "2048
 [v _SSPADD SSPADD `VEuc  1 e 1 @147 ]
 "2177
 [v _SSPSTAT SSPSTAT `VEuc  1 e 1 @148 ]
-[s S246 . 1 `uc 1 BF 1 0 :1:0 
+[s S255 . 1 `uc 1 BF 1 0 :1:0 
 `uc 1 UA 1 0 :1:1 
 `uc 1 R_nW 1 0 :1:2 
 `uc 1 S 1 0 :1:3 
@@ -276,40 +282,40 @@ Repeated 0
 `uc 1 SMP 1 0 :1:7 
 ]
 "2231
-[s S255 . 1 `uc 1 . 1 0 :2:0 
+[s S264 . 1 `uc 1 . 1 0 :2:0 
 `uc 1 R 1 0 :1:2 
 `uc 1 . 1 0 :2:3 
 `uc 1 D 1 0 :1:5 
 ]
-[s S260 . 1 `uc 1 . 1 0 :2:0 
+[s S269 . 1 `uc 1 . 1 0 :2:0 
 `uc 1 I2C_READ 1 0 :1:2 
 `uc 1 I2C_START 1 0 :1:3 
 `uc 1 I2C_STOP 1 0 :1:4 
 `uc 1 I2C_DATA 1 0 :1:5 
 ]
-[s S266 . 1 `uc 1 . 1 0 :2:0 
+[s S275 . 1 `uc 1 . 1 0 :2:0 
 `uc 1 nW 1 0 :1:2 
 `uc 1 . 1 0 :2:3 
 `uc 1 nA 1 0 :1:5 
 ]
-[s S271 . 1 `uc 1 . 1 0 :2:0 
+[s S280 . 1 `uc 1 . 1 0 :2:0 
 `uc 1 nWRITE 1 0 :1:2 
 `uc 1 . 1 0 :2:3 
 `uc 1 nADDRESS 1 0 :1:5 
 ]
-[s S276 . 1 `uc 1 . 1 0 :2:0 
+[s S285 . 1 `uc 1 . 1 0 :2:0 
 `uc 1 R_W 1 0 :1:2 
 `uc 1 . 1 0 :2:3 
 `uc 1 D_A 1 0 :1:5 
 ]
-[s S281 . 1 `uc 1 . 1 0 :2:0 
+[s S290 . 1 `uc 1 . 1 0 :2:0 
 `uc 1 READ_WRITE 1 0 :1:2 
 `uc 1 . 1 0 :2:3 
 `uc 1 DATA_ADDRESS 1 0 :1:5 
 ]
-[u S286 . 1 `S246 1 . 1 0 `S255 1 . 1 0 `S260 1 . 1 0 `S266 1 . 1 0 `S271 1 . 1 0 `S276 1 . 1 0 `S281 1 . 1 0 ]
-[v _SSPSTATbits SSPSTATbits `VES286  1 e 1 @148 ]
-[s S598 . 1 `uc 1 TX9D 1 0 :1:0 
+[u S295 . 1 `S255 1 . 1 0 `S264 1 . 1 0 `S269 1 . 1 0 `S275 1 . 1 0 `S280 1 . 1 0 `S285 1 . 1 0 `S290 1 . 1 0 ]
+[v _SSPSTATbits SSPSTATbits `VES295  1 e 1 @148 ]
+[s S607 . 1 `uc 1 TX9D 1 0 :1:0 
 `uc 1 TRMT 1 0 :1:1 
 `uc 1 BRGH 1 0 :1:2 
 `uc 1 SENDB 1 0 :1:3 
@@ -319,20 +325,20 @@ Repeated 0
 `uc 1 CSRC 1 0 :1:7 
 ]
 "2582
-[s S607 . 1 `uc 1 TXD8 1 0 :1:0 
+[s S616 . 1 `uc 1 TXD8 1 0 :1:0 
 `uc 1 . 1 0 :5:1 
 `uc 1 nTX8 1 0 :1:6 
 ]
-[s S611 . 1 `uc 1 . 1 0 :6:0 
+[s S620 . 1 `uc 1 . 1 0 :6:0 
 `uc 1 TX8_9 1 0 :1:6 
 ]
-[u S614 . 1 `S598 1 . 1 0 `S607 1 . 1 0 `S611 1 . 1 0 ]
-[v _TXSTAbits TXSTAbits `VES614  1 e 1 @152 ]
+[u S623 . 1 `S607 1 . 1 0 `S616 1 . 1 0 `S620 1 . 1 0 ]
+[v _TXSTAbits TXSTAbits `VES623  1 e 1 @152 ]
 "2642
 [v _SPBRG SPBRG `VEuc  1 e 1 @153 ]
 "2704
 [v _SPBRGH SPBRGH `VEuc  1 e 1 @154 ]
-[s S635 . 1 `uc 1 ABDEN 1 0 :1:0 
+[s S644 . 1 `uc 1 ABDEN 1 0 :1:0 
 `uc 1 WUE 1 0 :1:1 
 `uc 1 . 1 0 :1:2 
 `uc 1 BRG16 1 0 :1:3 
@@ -342,8 +348,8 @@ Repeated 0
 `uc 1 ABDOVF 1 0 :1:7 
 ]
 "3352
-[u S644 . 1 `S635 1 . 1 0 ]
-[v _BAUDCTLbits BAUDCTLbits `VES644  1 e 1 @391 ]
+[u S653 . 1 `S644 1 . 1 0 ]
+[v _BAUDCTLbits BAUDCTLbits `VES653  1 e 1 @391 ]
 "3387
 [v _ANSEL ANSEL `VEuc  1 e 1 @392 ]
 "3449
@@ -384,23 +390,23 @@ Repeated 0
 [v _dec_y dec_y `uc  1 e 1 0 ]
 "70
 [v _cen_y cen_y `uc  1 e 1 0 ]
-"92
+"93
 [v _main main `(v  1 e 1 0 ]
 {
-"161
+"167
 } 0
-"208
+"216
 [v _tabla_numASCII tabla_numASCII `(uc  1 e 1 0 ]
 {
 [v tabla_numASCII@a a `uc  1 a 1 wreg ]
 [v tabla_numASCII@a a `uc  1 a 1 wreg ]
 [v tabla_numASCII@a a `uc  1 a 1 4 ]
-"243
+"251
 } 0
-"164
+"170
 [v _setup setup `(v  1 e 1 0 ]
 {
-"199
+"207
 } 0
 "77 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\LCD.c
 [v _set_cursor set_cursor `(v  1 e 1 0 ]
@@ -489,15 +495,22 @@ Repeated 0
 [v Escribir_stringLCD@d d `*.24DCuc  1 a 1 6 ]
 "61
 } 0
-"201 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\Maestro I2C.c
+"13 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\UART.c
+[v _Config_USART Config_USART `(v  1 e 1 0 ]
+{
+[v Config_USART@baud_rate baud_rate `i  1 p 2 2 ]
+[v Config_USART@Freq Freq `i  1 p 2 4 ]
+"80
+} 0
+"209 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\Maestro I2C.c
 [v _divisor_dec divisor_dec `(v  1 e 1 0 ]
 {
-"202
+"210
 [v divisor_dec@n n `i  1 a 2 9 ]
-"201
+"209
 [v divisor_dec@b b `i  1 p 2 4 ]
 [v divisor_dec@dig1 dig1 `*.1uc  1 p 1 6 ]
-"206
+"214
 } 0
 "5 C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\awmod.c
 [v ___awmod __awmod `(i  1 e 2 0 ]
@@ -561,8 +574,8 @@ Repeated 0
 {
 "15
 } 0
-"86 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\Maestro I2C.c
+"87 D:\Archivos\Documentos\Universidad y colegio\UVG\2022\Primer Semestre\Electrónica digital 2\Proyectos\Miniproyecto2\MAESTRO MPLAB\Maestro I2C.c
 [v _isr isr `II(v  1 e 1 0 ]
 {
-"89
+"90
 } 0

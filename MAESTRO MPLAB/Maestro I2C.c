@@ -75,6 +75,7 @@ char uni_z = 0;
 char dec_z = 0;
 char cen_z = 0;
 
+char output = 0;
 //------------Funciones sin retorno de variables----------------------
 void setup(void);                                   // Función de setup
 char tabla_numASCII(char a);                        // Función para pasar un caracter a su equivalente en ASCII
@@ -98,8 +99,8 @@ void main(void) {
         I2C_Master_Start(Standard);
         I2CMasterWrite(IMU+0);                          // Slave: IMU | Operación: Write (+0)
         I2CMasterWrite(ACCEL_XOUT_H);                   // CMD: Selección de registro inicial = GYRO_XOUT_H 
-
-        I2C_Master_Start(Repeated);                       // Inicio de lectura continua
+        
+        I2C_Master_Start(Standard);                       // Inicio de lectura continua
         I2CMasterWrite(IMU+1);                          // Slave: IMU | Operación: Read (+1)
         
         // Lectura de giroscopio
@@ -111,17 +112,22 @@ void main(void) {
         // donde se enviará el bit de acknowledge es en la última lectura, ya que acá ya no queremos recibir
         // más valores.
         
-        
+//        for(int i = 0; i < 16; i++){
+//            output = (I2CMasterRead(ACK));
+//            __delay_ms(1);
+//        }
+       
         // Bits más significativos<<8 + Menos significativos
-        Ax = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);       
-        Ay = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Az = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Temp = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Gx = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Gy = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
-        Gz = (I2CMasterRead(ACK)<<8) | I2CMasterRead(NACK);
+        Ax = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);       
+        Ay = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Az = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Temp = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Gx = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Gy = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
+        Gz = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(NACK);
         
         I2CMasterStop();                                // Fin del "burst read" o lectura continua
+        __delay_ms(10);
         
         //---------------------------------------------------------------------- 
         // IMPRIMIR VALORES A LCD
@@ -169,9 +175,11 @@ void setup(void){
     
     TRISA = 0;                                      // PORTA como salida
     TRISB = 0;                                      // PORTB como salida
+    TRISD = 0;
     
     PORTA = 0;                                      // Limpiar PORTA
     PORTB = 0;                                      // Limpiar PORTB
+    PORTD = 0;
     
     //Configuración de oscilador
     initOsc(_4MHz);                                 // Oscilador a 8 mega hertz
@@ -193,8 +201,8 @@ void setup(void){
     __delay_ms(5000);
     Limpiar_pantallaLCD();
     
-//    //Configuración de TX y RX
-//    Config_USART(9600,4);
+    //Configuración de TX y RX
+    Config_USART(9600,4);
     
 }
 
