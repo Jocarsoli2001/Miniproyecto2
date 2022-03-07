@@ -42,6 +42,11 @@
 #define ACCEL_Z_MAX     16509
 #define ACCEL_Z_MIN     -16546
 
+// NOTA: Para que el IMU logre funcionar, es necesario tomar en cuenta que el pin
+// AD0 debe de estar conectado a voltaje. Si no se coloca a voltaje o a tierra, 
+// el sensor comenzará a mandar el valor de -1 o el valor 1111 1111 1111 1111 en binario.
+// Si este error sucede, chequear conexión. 
+
 #define IMU 0b11010010                              // Dirección de la IMU + 1 cero (LSb)
 
 // Definición de subrutinas del sensor

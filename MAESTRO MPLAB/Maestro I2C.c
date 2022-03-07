@@ -129,10 +129,10 @@ void main(void) {
         I2CMasterStop();                                // Fin del "burst read" o lectura continua
         __delay_ms(10);
         
+        
         //---------------------------------------------------------------------- 
         // IMPRIMIR VALORES A LCD
         //----------------------------------------------------------------------
-        
         // Divisor de valores en dígitos
         divisor_dec(Gx,Giro_digx);                      // Divide el valor leído por el osciloscopio en 
         

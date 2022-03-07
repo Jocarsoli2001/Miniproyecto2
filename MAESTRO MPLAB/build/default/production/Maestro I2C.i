@@ -2970,7 +2970,7 @@ void Mandar_dato(int dato);
 
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.32\\pic\\include\\c90\\stdint.h" 1 3
 # 3 "./MPU.h" 2
-# 48 "./MPU.h"
+# 53 "./MPU.h"
 void InitMPU6050();
 # 41 "Maestro I2C.c" 2
 # 52 "Maestro I2C.c"

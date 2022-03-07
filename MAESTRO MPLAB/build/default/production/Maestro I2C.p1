@@ -78,8 +78,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 "55 ./I2C.h
 [; ;./I2C.h: 55: void InitMSSP(MSSP_Mode Modo, unsigned long Dato);
 [v _InitMSSP `(v ~T0 @X0 0 ef2`E1557`ul ]
-"48 ./MPU.h
-[; ;./MPU.h: 48: void InitMPU6050();
+"53 ./MPU.h
+[; ;./MPU.h: 53: void InitMPU6050();
 [v _InitMPU6050 `(v ~T0 @X0 0 e? ]
 "66 ./LCD.h
 [; ;./LCD.h: 66: void Iniciar_LCD(void);

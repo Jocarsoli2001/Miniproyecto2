@@ -2850,7 +2850,7 @@ extern char * strichr(const char *, int);
 extern char * strrchr(const char *, int);
 extern char * strrichr(const char *, int);
 # 6 "./MPU.h" 2
-# 48 "./MPU.h"
+# 53 "./MPU.h"
 void InitMPU6050();
 # 9 "MPU.c" 2
 
