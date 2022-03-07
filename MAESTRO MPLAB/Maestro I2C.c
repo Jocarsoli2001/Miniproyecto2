@@ -44,7 +44,6 @@
 #define _XTAL_FREQ 8000000
 
 //-----------------------Constantes----------------------------------
-#define IMU 0x68                                    // Dirección de la IMU + 1 cero (LSb)
 #define PIC_esclavo 0x50                            // Constante que lleva la dirección del PIC esclavo
 
 //-----------------------Variables------------------------------------
@@ -79,7 +78,7 @@ char cen_z = 0;
 //------------Funciones sin retorno de variables----------------------
 void setup(void);                                   // Función de setup
 char tabla_numASCII(char a);                        // Función para pasar un caracter a su equivalente en ASCII
-void divisor_dec(uint8_t b, char dig1[]);           // Función para dividir valores en sus dígitos decimales
+void divisor_dec(int b, char dig1[]);               // Función para dividir valores en sus dígitos decimales
 
 //-------------Funciones que retornan variables-----------------------
 
@@ -96,13 +95,12 @@ void main(void) {
         //---------------------------------------------------------------------- 
         // COMUNICACIÓN I2C CON GIROSCOPIO
         //----------------------------------------------------------------------
-        I2C_Master_Start();
-        I2C_Master_Write(IMU+0);                        // Slave: IMU | Operación: Write (+0)
-        I2C_Master_Write(ACCEL_XOUT_H);                 // CMD: Selección de registro inicial = ACCEL_XOUT_H 
-        I2C_Master_Stop();
-        
-        I2C_Master_RepeatedStart();                     // Inicio de lectura continua
-        I2C_Master_Write(IMU+1);                        // Slave: IMU | Operación: Read (+1)
+        I2C_Master_Start(Standard);
+        I2CMasterWrite(IMU+0);                          // Slave: IMU | Operación: Write (+0)
+        I2CMasterWrite(ACCEL_XOUT_H);                   // CMD: Selección de registro inicial = GYRO_XOUT_H 
+
+        I2C_Master_Start(Repeated);                       // Inicio de lectura continua
+        I2CMasterWrite(IMU+1);                          // Slave: IMU | Operación: Read (+1)
         
         // Lectura de giroscopio
         // NOTA: Se realizará una lectura continua de todos los valores que devuelve el IMU. El IMU
@@ -115,15 +113,15 @@ void main(void) {
         
         
         // Bits más significativos<<8 + Menos significativos
-        Ax = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);       
-        Ay = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Az = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Temp = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Gx = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Gy = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Gz = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(1);
+        Ax = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);       
+        Ay = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Az = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Temp = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Gx = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Gy = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Gz = (I2CMasterRead(ACK)<<8) | I2CMasterRead(NACK);
         
-        I2C_Master_Stop();                              // Fin del "burst read" o lectura continua
+        I2CMasterStop();                                // Fin del "burst read" o lectura continua
         
         //---------------------------------------------------------------------- 
         // IMPRIMIR VALORES A LCD
@@ -146,6 +144,19 @@ void main(void) {
         Escribir_caracterLCD(dec_x);
         Escribir_caracterLCD(uni_x);
         
+        // Divisor de valores en dígitos
+        divisor_dec(Gy,Giro_digy);                      // Divide el valor leído por el osciloscopio en 
+        
+        // Paso de valores a ASCII            
+        uni_y = tabla_numASCII(Giro_digy[0]);
+        dec_y = tabla_numASCII(Giro_digy[1]);
+        cen_y = tabla_numASCII(Giro_digy[2]);
+        
+        set_cursor(2,6);
+        Escribir_caracterLCD(cen_y);                    // Se escriben todos los valores en las posiciones correspondientes a la LCD
+        Escribir_caracterLCD(dec_y);
+        Escribir_caracterLCD(uni_y);
+        
     }
 }
 
@@ -158,20 +169,16 @@ void setup(void){
     
     TRISA = 0;                                      // PORTA como salida
     TRISB = 0;                                      // PORTB como salida
-    TRISD = 0;                                      // PORTD como salida
-    TRISE = 0;                                      // PORTE como salida
     
     PORTA = 0;                                      // Limpiar PORTA
-    PORTD = 0;                                      // Limpiar PORTD
-    PORTE = 0;                                      // Limpiar PORTE
     PORTB = 0;                                      // Limpiar PORTB
-    PORTC = 0;
     
     //Configuración de oscilador
-    initOsc(_4MHz);                                 // Oscilador a 4 mega hertz
+    initOsc(_4MHz);                                 // Oscilador a 8 mega hertz
     
-    //Configuración de I2C
-    I2C_Master_Init(100000);
+    // Inicialización de módulo MSSP = I2C (Master)
+    // Frecuencia de Transmisión: 100 kHz
+    InitMSSP(I2C_MASTER_FOSC, 100000);
     
     //Inicialización y configuración de MPU6065
     InitMPU6050();
@@ -186,15 +193,15 @@ void setup(void){
     __delay_ms(5000);
     Limpiar_pantallaLCD();
     
-    //Configuración de TX y RX
-    Config_USART(9600,4);
+//    //Configuración de TX y RX
+//    Config_USART(9600,4);
     
 }
 
-void divisor_dec(uint8_t b, char dig1[]){            // Divide un número para obtener sus dígitos decimales
+void divisor_dec(int b, char dig1[]){              // Divide un número para obtener sus dígitos decimales
     for(int n = 0; n<3 ; n++){                      // De i = 0 hasta i = 2
-        dig1[n] = b % 10;                            // array[i] = cont_vol mod 10(retornar residuo). Devuelve digito por dígito de un número decimal.
-        b = (b - dig1[n])/10;                        // a = valor sin último digito.
+        dig1[n] = b % 10;                           // array[i] = cont_vol mod 10(retornar residuo). Devuelve digito por dígito de un número decimal.
+        b = (b - dig1[n])/10;                       // a = valor sin último digito.
     }
 }
 

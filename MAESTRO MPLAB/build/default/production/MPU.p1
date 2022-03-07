@@ -3,18 +3,19 @@ Version 4.0 HI-TECH Software Intermediate Code
 "92 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\pic.h
 [v __delay `JF1256 ~T0 @X0 0 e ]
 [p i __delay ]
-"40 ./I2C.h
-[; ;./I2C.h: 40: void I2C_Master_Start(void);
-[v _I2C_Master_Start `(v ~T0 @X0 0 ef ]
-"54
-[; ;./I2C.h: 54: void I2C_Master_Write(unsigned d);
-[v _I2C_Master_Write `(v ~T0 @X0 0 ef1`ui ]
-"44
-[; ;./I2C.h: 44: void I2C_Master_RepeatedStart(void);
-[v _I2C_Master_RepeatedStart `(v ~T0 @X0 0 ef ]
-"48
-[; ;./I2C.h: 48: void I2C_Master_Stop(void);
-[v _I2C_Master_Stop `(v ~T0 @X0 0 ef ]
+"17 MPU.c
+[; ;MPU.c: 17:     I2C_Master_Start(Standard);
+[c E1571 1 0 .. ]
+[n E1571 . Standard Repeated  ]
+"67 ./I2C.h
+[; ;./I2C.h: 67: void I2C_Master_Start(Start_Type Modo_Inicio);
+[v _I2C_Master_Start `(v ~T0 @X0 0 ef1`E1571 ]
+"77
+[; ;./I2C.h: 77: void I2CMasterWrite(char Datos);
+[v _I2CMasterWrite `(v ~T0 @X0 0 ef1`uc ]
+"71
+[; ;./I2C.h: 71: void I2CMasterStop(void);
+[v _I2CMasterStop `(v ~T0 @X0 0 ef ]
 "54 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h
 [; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8\pic\include\proc\pic16f887.h: 54: __asm("INDF equ 00h");
 [; <" INDF equ 00h ;# ">
@@ -259,68 +260,68 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;MPU.c: 14:     _delay((unsigned long)((150)*(8000000/4000.0)));
 [e ( __delay (1 -> * -> -> 150 `i `d / -> -> 8000000 `l `d .4000.0 `ul ]
 "17
-[; ;MPU.c: 17:     I2C_Master_Start();
-[e ( _I2C_Master_Start ..  ]
+[; ;MPU.c: 17:     I2C_Master_Start(Standard);
+[e ( _I2C_Master_Start (1 . `E1571 0 ]
 "18
-[; ;MPU.c: 18:     I2C_Master_Write(0b11010010 +0);
-[e ( _I2C_Master_Write (1 -> + -> 210 `i -> 0 `i `ui ]
+[; ;MPU.c: 18:     I2CMasterWrite(0b11010010 +0);
+[e ( _I2CMasterWrite (1 -> + -> 210 `i -> 0 `i `uc ]
 "19
-[; ;MPU.c: 19:     I2C_Master_Write(0x6B);
-[e ( _I2C_Master_Write (1 -> -> 107 `i `ui ]
+[; ;MPU.c: 19:     I2CMasterWrite(0x6B);
+[e ( _I2CMasterWrite (1 -> -> 107 `i `uc ]
 "20
-[; ;MPU.c: 20:     I2C_Master_Write(0b00000001);
-[e ( _I2C_Master_Write (1 -> -> 1 `i `ui ]
+[; ;MPU.c: 20:     I2CMasterWrite(0b00000001);
+[e ( _I2CMasterWrite (1 -> -> 1 `i `uc ]
 "24
-[; ;MPU.c: 24:     I2C_Master_RepeatedStart();
-[e ( _I2C_Master_RepeatedStart ..  ]
+[; ;MPU.c: 24:     I2C_Master_Start(Repeated);
+[e ( _I2C_Master_Start (1 . `E1571 1 ]
 "25
-[; ;MPU.c: 25:     I2C_Master_Write(0b11010010 +0);
-[e ( _I2C_Master_Write (1 -> + -> 210 `i -> 0 `i `ui ]
+[; ;MPU.c: 25:     I2CMasterWrite(0b11010010 +0);
+[e ( _I2CMasterWrite (1 -> + -> 210 `i -> 0 `i `uc ]
 "26
-[; ;MPU.c: 26:     I2C_Master_Write(0x1B);
-[e ( _I2C_Master_Write (1 -> -> 27 `i `ui ]
+[; ;MPU.c: 26:     I2CMasterWrite(0x1B);
+[e ( _I2CMasterWrite (1 -> -> 27 `i `uc ]
 "27
-[; ;MPU.c: 27:     I2C_Master_Write(0b00000000);
-[e ( _I2C_Master_Write (1 -> -> 0 `i `ui ]
+[; ;MPU.c: 27:     I2CMasterWrite(0b00000000);
+[e ( _I2CMasterWrite (1 -> -> 0 `i `uc ]
 "31
-[; ;MPU.c: 31:     I2C_Master_RepeatedStart();
-[e ( _I2C_Master_RepeatedStart ..  ]
+[; ;MPU.c: 31:     I2C_Master_Start(Repeated);
+[e ( _I2C_Master_Start (1 . `E1571 1 ]
 "32
-[; ;MPU.c: 32:     I2C_Master_Write(0b11010010 +0);
-[e ( _I2C_Master_Write (1 -> + -> 210 `i -> 0 `i `ui ]
+[; ;MPU.c: 32:     I2CMasterWrite(0b11010010 +0);
+[e ( _I2CMasterWrite (1 -> + -> 210 `i -> 0 `i `uc ]
 "33
-[; ;MPU.c: 33:     I2C_Master_Write(0x1C);
-[e ( _I2C_Master_Write (1 -> -> 28 `i `ui ]
+[; ;MPU.c: 33:     I2CMasterWrite(0x1C);
+[e ( _I2CMasterWrite (1 -> -> 28 `i `uc ]
 "34
-[; ;MPU.c: 34:     I2C_Master_Write(0b00000000);
-[e ( _I2C_Master_Write (1 -> -> 0 `i `ui ]
+[; ;MPU.c: 34:     I2CMasterWrite(0b00000000);
+[e ( _I2CMasterWrite (1 -> -> 0 `i `uc ]
 "37
-[; ;MPU.c: 37:     I2C_Master_RepeatedStart();
-[e ( _I2C_Master_RepeatedStart ..  ]
+[; ;MPU.c: 37:     I2C_Master_Start(Repeated);
+[e ( _I2C_Master_Start (1 . `E1571 1 ]
 "38
-[; ;MPU.c: 38:     I2C_Master_Write(0b11010010 +0);
-[e ( _I2C_Master_Write (1 -> + -> 210 `i -> 0 `i `ui ]
+[; ;MPU.c: 38:     I2CMasterWrite(0b11010010 +0);
+[e ( _I2CMasterWrite (1 -> + -> 210 `i -> 0 `i `uc ]
 "39
-[; ;MPU.c: 39:     I2C_Master_Write(0x1A);
-[e ( _I2C_Master_Write (1 -> -> 26 `i `ui ]
+[; ;MPU.c: 39:     I2CMasterWrite(0x1A);
+[e ( _I2CMasterWrite (1 -> -> 26 `i `uc ]
 "40
-[; ;MPU.c: 40:     I2C_Master_Write(0b00000000);
-[e ( _I2C_Master_Write (1 -> -> 0 `i `ui ]
+[; ;MPU.c: 40:     I2CMasterWrite(0b00000000);
+[e ( _I2CMasterWrite (1 -> -> 0 `i `uc ]
 "43
-[; ;MPU.c: 43:     I2C_Master_RepeatedStart();
-[e ( _I2C_Master_RepeatedStart ..  ]
+[; ;MPU.c: 43:     I2C_Master_Start(Repeated);
+[e ( _I2C_Master_Start (1 . `E1571 1 ]
 "44
-[; ;MPU.c: 44:     I2C_Master_Write(0b11010010 +0);
-[e ( _I2C_Master_Write (1 -> + -> 210 `i -> 0 `i `ui ]
+[; ;MPU.c: 44:     I2CMasterWrite(0b11010010 +0);
+[e ( _I2CMasterWrite (1 -> + -> 210 `i -> 0 `i `uc ]
 "45
-[; ;MPU.c: 45:     I2C_Master_Write(0x19);
-[e ( _I2C_Master_Write (1 -> -> 25 `i `ui ]
+[; ;MPU.c: 45:     I2CMasterWrite(0x19);
+[e ( _I2CMasterWrite (1 -> -> 25 `i `uc ]
 "46
-[; ;MPU.c: 46:     I2C_Master_Write(0b00000111);
-[e ( _I2C_Master_Write (1 -> -> 7 `i `ui ]
+[; ;MPU.c: 46:     I2CMasterWrite(0b00000111);
+[e ( _I2CMasterWrite (1 -> -> 7 `i `uc ]
 "48
-[; ;MPU.c: 48:     I2C_Master_Stop();
-[e ( _I2C_Master_Stop ..  ]
+[; ;MPU.c: 48:     I2CMasterStop();
+[e ( _I2CMasterStop ..  ]
 "50
 [; ;MPU.c: 50: }
 [e :UE 143 ]

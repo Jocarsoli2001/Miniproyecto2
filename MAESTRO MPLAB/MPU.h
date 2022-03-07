@@ -16,6 +16,7 @@
 #define ACCEL_CONFIG    0x1C
 #define CONFIG          0x1A
 #define SMPRT_DIV       0x19
+
 // Definiciones de lectura de datos
 #define ACCEL_XOUT_H    0x3B
 #define ACCEL_XOUT_L    0x3C
@@ -29,6 +30,7 @@
 #define GYRO_YOUT_L     0x46
 #define GYRO_ZOUT_H     0x47
 #define GYRO_ZOUT_L     0x48
+
 // Valores de Calibración
 #define GYRO_OFF_X      -354
 #define GYRO_OFF_Y      140

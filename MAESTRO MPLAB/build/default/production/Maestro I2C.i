@@ -2869,8 +2869,6 @@ extern char * strrichr(const char *, int);
 # 19 "./I2C.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.32\\pic\\include\\c90\\stdint.h" 1 3
 # 19 "./I2C.h" 2
-# 28 "./I2C.h"
-void I2C_Master_Init(const unsigned long c);
 
 
 
@@ -2878,41 +2876,70 @@ void I2C_Master_Init(const unsigned long c);
 
 
 
-void I2C_Master_Wait(void);
+typedef enum{
+    SPI_MASTER_FOSC4 = 0b00000000,
+    SPI_MASTER_FOSC16 = 0b00000001,
+    SPI_MASTER_FOSC64 = 0b00000010,
+    SPI_MASTER_TMR2 = 0b00000011,
+    SPI_SLAVE_SS_EN = 0b00000100,
+    SPI_SLAVE_SS_DIS = 0b00000101,
+    I2C_SLAVE_7BIT = 0b00000110,
+    I2C_SLAVE_10BIT = 0b00000111,
+    I2C_MASTER_FOSC = 0b00001000,
+    I2C_SLAVE_7BIT_SS = 0b00001110,
+    I2C_SLAVE_10BIT_SS = 0b00001110
+}MSSP_Mode;
+
+
+typedef enum{
+    Standard = 1,
+    Repeated = 0
+} Start_Type;
+
+
+typedef enum{
+    ACK = 0,
+    NACK = 1
+} ACK_Type;
 
 
 
-void I2C_Master_Start(void);
 
-
-
-void I2C_Master_RepeatedStart(void);
-
-
-
-void I2C_Master_Stop(void);
+void InitMSSP(MSSP_Mode Modo, unsigned long Dato);
 
 
 
 
 
-void I2C_Master_Write(unsigned d);
+
+
+void I2CMasterCheck();
+
+
+
+void I2C_Master_Start(Start_Type Modo_Inicio);
+
+
+
+void I2CMasterStop(void);
 
 
 
 
-unsigned short I2C_Master_Read(unsigned short a);
+
+void I2CMasterWrite(char Datos);
 
 
 
-void I2C_Slave_Init(uint8_t address);
+
+char I2CMasterRead(ACK_Type ACK);
 # 37 "Maestro I2C.c" 2
 
 # 1 "./LCD.h" 1
-# 35 "./LCD.h"
+# 34 "./LCD.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.32\\pic\\include\\c90\\stdint.h" 1 3
-# 35 "./LCD.h" 2
-# 65 "./LCD.h"
+# 34 "./LCD.h" 2
+# 64 "./LCD.h"
 void Escribir_comandoLCD(unsigned char);
 void Escribir_datosLCD(char);
 void Iniciar_LCD(void);
@@ -2943,10 +2970,10 @@ void Mandar_dato(int dato);
 
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.32\\pic\\include\\c90\\stdint.h" 1 3
 # 3 "./MPU.h" 2
-# 46 "./MPU.h"
+# 48 "./MPU.h"
 void InitMPU6050();
 # 41 "Maestro I2C.c" 2
-# 53 "Maestro I2C.c"
+# 52 "Maestro I2C.c"
 int Ax = 0;
 int Ay = 0;
 int Az = 0;
@@ -2976,7 +3003,7 @@ char cen_z = 0;
 
 void setup(void);
 char tabla_numASCII(char a);
-void divisor_dec(uint8_t b, char dig1[]);
+void divisor_dec(int b, char dig1[]);
 
 
 
@@ -2993,23 +3020,22 @@ void main(void) {
 
 
 
-        I2C_Master_Start();
-        I2C_Master_Write(0x68 +0);
-        I2C_Master_Write(0x3B);
-        I2C_Master_Stop();
+        I2C_Master_Start(Standard);
+        I2CMasterWrite(0b11010010 +0);
+        I2CMasterWrite(0x3B);
 
-        I2C_Master_RepeatedStart();
-        I2C_Master_Write(0x68 +1);
-# 118 "Maestro I2C.c"
-        Ax = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Ay = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Az = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Temp = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Gx = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Gy = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(0);
-        Gz = ((int)I2C_Master_Read(0)<<8) | (int)I2C_Master_Read(1);
+        I2C_Master_Start(Repeated);
+        I2CMasterWrite(0b11010010 +1);
+# 116 "Maestro I2C.c"
+        Ax = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Ay = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Az = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Temp = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Gx = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Gy = (I2CMasterRead(ACK)<<8) | I2CMasterRead(ACK);
+        Gz = (I2CMasterRead(ACK)<<8) | I2CMasterRead(NACK);
 
-        I2C_Master_Stop();
+        I2CMasterStop();
 
 
 
@@ -3032,6 +3058,19 @@ void main(void) {
         Escribir_caracterLCD(dec_x);
         Escribir_caracterLCD(uni_x);
 
+
+        divisor_dec(Gy,Giro_digy);
+
+
+        uni_y = tabla_numASCII(Giro_digy[0]);
+        dec_y = tabla_numASCII(Giro_digy[1]);
+        cen_y = tabla_numASCII(Giro_digy[2]);
+
+        set_cursor(2,6);
+        Escribir_caracterLCD(cen_y);
+        Escribir_caracterLCD(dec_y);
+        Escribir_caracterLCD(uni_y);
+
     }
 }
 
@@ -3044,20 +3083,16 @@ void setup(void){
 
     TRISA = 0;
     TRISB = 0;
-    TRISD = 0;
-    TRISE = 0;
 
     PORTA = 0;
-    PORTD = 0;
-    PORTE = 0;
     PORTB = 0;
-    PORTC = 0;
 
 
     initOsc(4);
 
 
-    I2C_Master_Init(100000);
+
+    InitMSSP(I2C_MASTER_FOSC, 100000);
 
 
     InitMPU6050();
@@ -3073,11 +3108,11 @@ void setup(void){
     Limpiar_pantallaLCD();
 
 
-    Config_USART(9600,4);
+
 
 }
 
-void divisor_dec(uint8_t b, char dig1[]){
+void divisor_dec(int b, char dig1[]){
     for(int n = 0; n<3 ; n++){
         dig1[n] = b % 10;
         b = (b - dig1[n])/10;
