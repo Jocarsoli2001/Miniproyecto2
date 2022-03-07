@@ -2935,7 +2935,6 @@ void I2CMasterWrite(char Datos);
 char I2CMasterRead(ACK_Type ACK);
 # 37 "Maestro I2C.c" 2
 
-
 # 1 "./LCD.h" 1
 # 34 "./LCD.h"
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.32\\pic\\include\\c90\\stdint.h" 1 3
@@ -2949,7 +2948,7 @@ void Limpiar_pantallaLCD(void);
 void prender_ELCD(void);
 void set_cursor(char linea, char posicion);
 void Escribir_caracterLCD(uint8_t a);
-# 39 "Maestro I2C.c" 2
+# 38 "Maestro I2C.c" 2
 
 # 1 "./Oscilador.h" 1
 # 35 "./Oscilador.h"
@@ -2957,7 +2956,7 @@ void Escribir_caracterLCD(uint8_t a);
 # 35 "./Oscilador.h" 2
 # 48 "./Oscilador.h"
 void initOsc(uint8_t Valor);
-# 40 "Maestro I2C.c" 2
+# 39 "Maestro I2C.c" 2
 
 # 1 "./UART.h" 1
 # 32 "./UART.h"
@@ -2965,7 +2964,7 @@ void Config_USART(int baud_rate, int Freq);
 int Recibir_dato(int dato);
 void Mandar_dato(int dato);
 void UART_Write(char data);
-# 41 "Maestro I2C.c" 2
+# 40 "Maestro I2C.c" 2
 
 # 1 "./MPU.h" 1
 
@@ -2974,8 +2973,8 @@ void UART_Write(char data);
 # 3 "./MPU.h" 2
 # 53 "./MPU.h"
 void InitMPU6050();
-# 42 "Maestro I2C.c" 2
-# 56 "Maestro I2C.c"
+# 41 "Maestro I2C.c" 2
+# 55 "Maestro I2C.c"
 char Ax1 = 0;
 char Ax2 = 0;
 char Ay1 = 0;
@@ -3044,7 +3043,7 @@ void main(void) {
 
         I2C_Master_Start(Repeated);
         I2CMasterWrite(0b11010010 +1);
-# 135 "Maestro I2C.c"
+# 134 "Maestro I2C.c"
         Ax1 = I2CMasterRead(ACK); Ax2 = I2CMasterRead(ACK);
         Ay1 = I2CMasterRead(ACK); Ay2 = I2CMasterRead(ACK);
         Az1 = I2CMasterRead(ACK); Az2 = I2CMasterRead(ACK);
@@ -3054,16 +3053,23 @@ void main(void) {
         Gz1 = I2CMasterRead(ACK); Gz2 = I2CMasterRead(NACK);
 
         I2CMasterStop();
-        _delay((unsigned long)((250)*(8000000/4000.0)));
-# 157 "Maestro I2C.c"
+
+
+
+
+
+        UART_Write(Gx1);
+        _delay((unsigned long)((20)*(8000000/4000.0)));
+
+
+
+
+
         I2C_Master_Start(Standard);
         I2CMasterWrite(0x50);
-        I2CMasterWrite(1);
-
-        estado_sem = I2CMasterRead(NACK);
+        I2CMasterWrite(2);
 
         I2CMasterStop();
-        _delay((unsigned long)((250)*(8000000/4000.0)));
 
 
 
@@ -3098,7 +3104,7 @@ void main(void) {
         Escribir_caracterLCD(cen_y);
         Escribir_caracterLCD(dec_y);
         Escribir_caracterLCD(uni_y);
-# 208 "Maestro I2C.c"
+# 203 "Maestro I2C.c"
     }
 }
 

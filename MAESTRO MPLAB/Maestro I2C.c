@@ -35,7 +35,6 @@
 
 //---------------------Librearías creadas por usuario--------------------
 #include "I2C.h"
-//#include "I2C1.h"
 #include "LCD.h"
 #include "Oscilador.h"
 #include "UART.h"
@@ -92,9 +91,9 @@ char estado_sem = 0;
 int bandera = 1;
 
 //------------Funciones sin retorno de variables----------------------
-void setup(void);                                   // Función de setup
-char tabla_numASCII(char a);                        // Función para pasar un caracter a su equivalente en ASCII
-void divisor_dec(int b, char dig1[]);               // Función para dividir valores en sus dígitos decimales
+void setup(void);                                           // Función de setup
+char tabla_numASCII(char a);                                // Función para pasar un caracter a su equivalente en ASCII
+void divisor_dec(int b, char dig1[]);                       // Función para dividir valores en sus dígitos decimales
 
 //-------------Funciones que retornan variables-----------------------
 
@@ -109,18 +108,18 @@ void __interrupt() isr(void){
 
 //----------------------Main Loop--------------------------------
 void main(void) {
-    setup();                                        // Contiene todas las subrutinas de configuración
+    setup();                                                // Contiene todas las subrutinas de configuración
     while(1){
         //---------------------------------------------------------------------- 
         // COMUNICACIÓN I2C CON GIROSCOPIO
         //----------------------------------------------------------------------
         
         I2C_Master_Start(Standard);
-        I2CMasterWrite(IMU+0);                          // Slave: IMU | Operación: Write (+0)
-        I2CMasterWrite(ACCEL_XOUT_H);                   // CMD: Selección de registro inicial = GYRO_XOUT_H 
+        I2CMasterWrite(IMU+0);                              // Slave: IMU | Operación: Write (+0)
+        I2CMasterWrite(ACCEL_XOUT_H);                       // CMD: Selección de registro inicial = GYRO_XOUT_H 
 
-        I2C_Master_Start(Repeated);                     // Inicio de lectura continua
-        I2CMasterWrite(IMU+1);                          // Slave: IMU | Operación: Read (+1)
+        I2C_Master_Start(Repeated);                         // Inicio de lectura continua
+        I2CMasterWrite(IMU+1);                              // Slave: IMU | Operación: Read (+1)
 
         // Lectura de giroscopio
         // NOTA: Se realizará una lectura continua de todos los valores que devuelve el IMU. El IMU
@@ -140,35 +139,31 @@ void main(void) {
         Gy1 = I2CMasterRead(ACK); Gy2 = I2CMasterRead(ACK);  
         Gz1 = I2CMasterRead(ACK); Gz2 = I2CMasterRead(NACK);
 
-        I2CMasterStop();                                // Fin del "burst read" o lectura continua
-        __delay_ms(250);
+        I2CMasterStop();                                    // Fin del "burst read" o lectura continua
         
         //---------------------------------------------------------------------- 
         // ENVIO DE VALORES A USART
         //----------------------------------------------------------------------
         
-//        UART_Write(Gx1);                                // Mandar valor de giroscopio en x
-//        __delay_ms(20);
+        UART_Write(Gx1);                                  // Mandar valor de giroscopio en x
+        __delay_ms(20);
         
         //---------------------------------------------------------------------- 
         // ESTADO DE SEMAFORO EN PIC PERIFÉRICO
         //----------------------------------------------------------------------
 //        
-        I2C_Master_Start(Standard);                             // Inicio de lectura continua
-        I2CMasterWrite(PIC_esclavo);                  // Slave: PIC | Operación: Read 
-        I2CMasterWrite(Rojo);
+        I2C_Master_Start(Standard);                         // Inicio de lectura continua
+        I2CMasterWrite(PIC_esclavo);                        // Slave: PIC | Operación: Read 
+        I2CMasterWrite(Amarillo);
 
-        estado_sem = I2CMasterRead(NACK);                // Leer que color se prende en esclavo
-
-        I2CMasterStop();                              // Detener la lectura en I2C
-        __delay_ms(250);
+        I2CMasterStop();                                    // Detener la lectura en I2C
         
         
         //---------------------------------------------------------------------- 
         // IMPRIMIR VALORES A LCD
         //----------------------------------------------------------------------
         // Divisor de valores en dígitos
-        divisor_dec(Gx1,Giro_digx);                     // Divide el valor leído por el osciloscopio en 
+        divisor_dec(Gx1,Giro_digx);                         // Divide el valor leído por el osciloscopio en 
         
         // Paso de valores a ASCII            
         uni_x = tabla_numASCII(Giro_digx[0]);
@@ -177,15 +172,15 @@ void main(void) {
         
         // Escritura de los valores en LCD
         set_cursor(1,0);
-        Escribir_stringLCD("X:    Y:     S:");          // X en pos 0, Y en pos 7 y Z en pos 14
+        Escribir_stringLCD("X:    Y:     S:");              // X en pos 0, Y en pos 7 y Z en pos 14
         
         set_cursor(2,0);
-        Escribir_caracterLCD(cen_x);                    // Se escriben todos los valores en las posiciones correspondientes a la LCD
+        Escribir_caracterLCD(cen_x);                        // Se escriben todos los valores en las posiciones correspondientes a la LCD
         Escribir_caracterLCD(dec_x);
         Escribir_caracterLCD(uni_x);
         
         // Divisor de valores en dígitos
-        divisor_dec(Gy1,Giro_digy);                     // Divide el valor leído por el osciloscopio en 
+        divisor_dec(Gy1,Giro_digy);                         // Divide el valor leído por el osciloscopio en 
         
         // Paso de valores a ASCII            
         uni_y = tabla_numASCII(Giro_digy[0]);
@@ -193,7 +188,7 @@ void main(void) {
         cen_y = tabla_numASCII(Giro_digy[2]);
         
         set_cursor(2,6);
-        Escribir_caracterLCD(cen_y);                    // Se escriben todos los valores en las posiciones correspondientes a la LCD
+        Escribir_caracterLCD(cen_y);                        // Se escriben todos los valores en las posiciones correspondientes a la LCD
         Escribir_caracterLCD(dec_y);
         Escribir_caracterLCD(uni_y);
         
