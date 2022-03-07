@@ -49,13 +49,20 @@
 //-----------------------Variables------------------------------------
 
 //Variables para giroscopio
-int Ax = 0;                                         // Aceleración sobre eje X de acelerómetro
-int Ay = 0;                                         // Aceleración sobre eje Y de acelerómetro
-int Az = 0;                                         // Aceleración sobre eje Z de acelerómetro
-int Temp = 0;                                       // Temperatura medida por IMU
-int Gx = 0;                                         // Medición del giroscopio sobre eje X 
-int Gy = 0;                                         // Medición del giroscopio sobre eje Y
-int Gz = 0;                                         // Medición del giroscopio sobre eje Z
+char Ax1 = 0;                                           // Medición del Acelerómetro sobre eje X (bits menos significativos)
+char Ax2 = 0;                                           // Medición del Acelerómetro sobre eje X (bits más significativos)
+char Ay1 = 0;                                           // Medición del Acelerómetro sobre eje y (bits menos significativos)
+char Ay2 = 0;                                           // Medición del Acelerómetro sobre eje y (bits más significativos)
+char Az1 = 0;                                           // Medición del Acelerómetro sobre eje z (bits menos significativos)
+char Az2 = 0;                                           // Medición del Acelerómetro sobre eje z (bits más significativos)
+char T1 = 0;                                            // Medición del termómetro (bits menos significativos)
+char T2 = 0;                                            // Medición del termómetro (bits más significativos)
+char Gx1 = 0;                                           // Medición del giroscopio sobre eje X (bits menos significativos)
+char Gx2 = 0;                                           // Medición del giroscopio sobre eje X (bits más significativos)
+char Gy1 = 0;                                           // Medición del giroscopio sobre eje Y (bits menos significativos)
+char Gy2 = 0;                                           // Medición del giroscopio sobre eje Y (bits más significativos)
+char Gz1 = 0;                                           // Medición del giroscopio sobre eje Z (bits menos significativos)
+char Gz2 = 0;                                           // Medición del giroscopio sobre eje Z (bits más significativos)
 
 //Variables para valores en LCD (eje x)
 char Giro_digx[];
@@ -75,7 +82,6 @@ char uni_z = 0;
 char dec_z = 0;
 char cen_z = 0;
 
-char output = 0;
 //------------Funciones sin retorno de variables----------------------
 void setup(void);                                   // Función de setup
 char tabla_numASCII(char a);                        // Función para pasar un caracter a su equivalente en ASCII
@@ -100,7 +106,7 @@ void main(void) {
         I2CMasterWrite(IMU+0);                          // Slave: IMU | Operación: Write (+0)
         I2CMasterWrite(ACCEL_XOUT_H);                   // CMD: Selección de registro inicial = GYRO_XOUT_H 
         
-        I2C_Master_Start(Standard);                       // Inicio de lectura continua
+        I2C_Master_Start(Repeated);                     // Inicio de lectura continua
         I2CMasterWrite(IMU+1);                          // Slave: IMU | Operación: Read (+1)
         
         // Lectura de giroscopio
@@ -111,20 +117,15 @@ void main(void) {
         // el IMU cambiará de registro y en cada lectura se obtiene un valor distinto. El único momento
         // donde se enviará el bit de acknowledge es en la última lectura, ya que acá ya no queremos recibir
         // más valores.
-        
-//        for(int i = 0; i < 16; i++){
-//            output = (I2CMasterRead(ACK));
-//            __delay_ms(1);
-//        }
        
-        // Bits más significativos<<8 + Menos significativos
-        Ax = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);       
-        Ay = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Az = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Temp = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Gx = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Gy = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Gz = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(NACK);
+        // En este caso se leen los bits más significativos y luego los menos significativos de todo el valor
+        Ax1 = I2CMasterRead(ACK); Ax2 = I2CMasterRead(ACK);       
+        Ay1 = I2CMasterRead(ACK); Ay2 = I2CMasterRead(ACK);  
+        Az1 = I2CMasterRead(ACK); Az2 = I2CMasterRead(ACK); 
+        T1 = I2CMasterRead(ACK); T2 = I2CMasterRead(ACK);
+        Gx1 = I2CMasterRead(ACK); Gx2 = I2CMasterRead(ACK);       
+        Gy1 = I2CMasterRead(ACK); Gy2 = I2CMasterRead(ACK);  
+        Gz1 = I2CMasterRead(ACK); Gz2 = I2CMasterRead(NACK);
         
         I2CMasterStop();                                // Fin del "burst read" o lectura continua
         __delay_ms(10);
@@ -134,7 +135,7 @@ void main(void) {
         // IMPRIMIR VALORES A LCD
         //----------------------------------------------------------------------
         // Divisor de valores en dígitos
-        divisor_dec(Gx,Giro_digx);                      // Divide el valor leído por el osciloscopio en 
+        divisor_dec(Gx1,Giro_digx);                      // Divide el valor leído por el osciloscopio en 
         
         // Paso de valores a ASCII            
         uni_x = tabla_numASCII(Giro_digx[0]);
@@ -151,7 +152,7 @@ void main(void) {
         Escribir_caracterLCD(uni_x);
         
         // Divisor de valores en dígitos
-        divisor_dec(Gy,Giro_digy);                      // Divide el valor leído por el osciloscopio en 
+        divisor_dec(Gy1,Giro_digy);                      // Divide el valor leído por el osciloscopio en 
         
         // Paso de valores a ASCII            
         uni_y = tabla_numASCII(Giro_digy[0]);

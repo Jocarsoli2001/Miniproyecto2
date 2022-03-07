@@ -2974,13 +2974,20 @@ void Mandar_dato(int dato);
 void InitMPU6050();
 # 41 "Maestro I2C.c" 2
 # 52 "Maestro I2C.c"
-int Ax = 0;
-int Ay = 0;
-int Az = 0;
-int Temp = 0;
-int Gx = 0;
-int Gy = 0;
-int Gz = 0;
+char Ax1 = 0;
+char Ax2 = 0;
+char Ay1 = 0;
+char Ay2 = 0;
+char Az1 = 0;
+char Az2 = 0;
+char T1 = 0;
+char T2 = 0;
+char Gx1 = 0;
+char Gx2 = 0;
+char Gy1 = 0;
+char Gy2 = 0;
+char Gz1 = 0;
+char Gz2 = 0;
 
 
 char Giro_digx[];
@@ -3000,7 +3007,6 @@ char uni_z = 0;
 char dec_z = 0;
 char cen_z = 0;
 
-char output = 0;
 
 void setup(void);
 char tabla_numASCII(char a);
@@ -3025,16 +3031,16 @@ void main(void) {
         I2CMasterWrite(0b11010010 +0);
         I2CMasterWrite(0x3B);
 
-        I2C_Master_Start(Standard);
+        I2C_Master_Start(Repeated);
         I2CMasterWrite(0b11010010 +1);
-# 121 "Maestro I2C.c"
-        Ax = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Ay = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Az = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Temp = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Gx = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Gy = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(ACK);
-        Gz = ((int)I2CMasterRead(ACK)<<8) | (int)I2CMasterRead(NACK);
+# 122 "Maestro I2C.c"
+        Ax1 = I2CMasterRead(ACK); Ax2 = I2CMasterRead(ACK);
+        Ay1 = I2CMasterRead(ACK); Ay2 = I2CMasterRead(ACK);
+        Az1 = I2CMasterRead(ACK); Az2 = I2CMasterRead(ACK);
+        T1 = I2CMasterRead(ACK); T2 = I2CMasterRead(ACK);
+        Gx1 = I2CMasterRead(ACK); Gx2 = I2CMasterRead(ACK);
+        Gy1 = I2CMasterRead(ACK); Gy2 = I2CMasterRead(ACK);
+        Gz1 = I2CMasterRead(ACK); Gz2 = I2CMasterRead(NACK);
 
         I2CMasterStop();
         _delay((unsigned long)((10)*(8000000/4000.0)));
@@ -3044,7 +3050,7 @@ void main(void) {
 
 
 
-        divisor_dec(Gx,Giro_digx);
+        divisor_dec(Gx1,Giro_digx);
 
 
         uni_x = tabla_numASCII(Giro_digx[0]);
@@ -3061,7 +3067,7 @@ void main(void) {
         Escribir_caracterLCD(uni_x);
 
 
-        divisor_dec(Gy,Giro_digy);
+        divisor_dec(Gy1,Giro_digy);
 
 
         uni_y = tabla_numASCII(Giro_digy[0]);
