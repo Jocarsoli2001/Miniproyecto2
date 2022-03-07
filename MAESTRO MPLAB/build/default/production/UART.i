@@ -2503,6 +2503,7 @@ extern __bank0 __bit __timeout;
 void Config_USART(int baud_rate, int Freq);
 int Recibir_dato(int dato);
 void Mandar_dato(int dato);
+void UART_Write(char data);
 # 11 "UART.c" 2
 
 
@@ -2573,4 +2574,9 @@ void Config_USART(int baud_rate, int Freq){
 
     TXSTAbits.TXEN = 1;
     PIE1bits.RCIE = 0;
+}
+
+void UART_Write(char data){
+  while(!TXIF);
+  TXREG = data;
 }

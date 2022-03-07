@@ -32,4 +32,5 @@
 void Config_USART(int baud_rate, int Freq);
 int Recibir_dato(int dato);
 void Mandar_dato(int dato);
+void UART_Write(char data);
 

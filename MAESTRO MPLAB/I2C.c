@@ -120,8 +120,12 @@ char I2CMasterRead(ACK_Type ACK){
     I2CMasterCheck();                               // ¿Transmisión de datos?
     Datos = SSPBUF;                                 // Se almacenan los datos recibidos en el buffer
     I2CMasterCheck();                               // ¿Transmisión de datos?
-    if (ACK == 0) SSPCON2bits.ACKDT = 0;            // 0 es el valor de "Acknowledge" 
-    else          SSPCON2bits.ACKDT = 1;            // 1 es el valor de "Acknowledge" (Negative Acknowledge o NACK)
+    if (ACK == 0) {
+      SSPCON2bits.ACKDT = 0;  
+    }                                               // 0 es el valor de "Acknowledge" 
+    else {
+      SSPCON2bits.ACKDT = 1;   
+    }                                               // 1 es el valor de "Acknowledge" (Negative Acknowledge o NACK)
     SSPCON2bits.ACKEN = 1;                          // Se inicia la secuencia de "Acknowledge"
     return Datos;
 }

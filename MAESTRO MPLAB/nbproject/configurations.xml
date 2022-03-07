@@ -9,6 +9,7 @@
       <itemPath>Oscilador.h</itemPath>
       <itemPath>UART.h</itemPath>
       <itemPath>MPU.h</itemPath>
+      <itemPath>I2C1.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -23,6 +24,7 @@
       <itemPath>Oscilador.c</itemPath>
       <itemPath>UART.c</itemPath>
       <itemPath>MPU.c</itemPath>
+      <itemPath>I2C1.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -166,6 +168,7 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

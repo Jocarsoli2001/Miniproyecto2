@@ -2802,8 +2802,12 @@ char I2CMasterRead(ACK_Type ACK){
     I2CMasterCheck();
     Datos = SSPBUF;
     I2CMasterCheck();
-    if (ACK == 0) SSPCON2bits.ACKDT = 0;
-    else SSPCON2bits.ACKDT = 1;
+    if (ACK == 0) {
+      SSPCON2bits.ACKDT = 0;
+    }
+    else {
+      SSPCON2bits.ACKDT = 1;
+    }
     SSPCON2bits.ACKEN = 1;
     return Datos;
 }

@@ -649,23 +649,35 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;I2C.c: 122:     I2CMasterCheck();
 [e ( _I2CMasterCheck ..  ]
 "123
-[; ;I2C.c: 123:     if (ACK == 0) SSPCON2bits.ACKDT = 0;
+[; ;I2C.c: 123:     if (ACK == 0) {
 [e $ ! == -> _ACK `ui -> -> 0 `i `ui 158  ]
-[e = . . _SSPCON2bits 0 5 -> -> 0 `i `uc ]
-[e $U 159  ]
+{
 "124
-[; ;I2C.c: 124:     else SSPCON2bits.ACKDT = 1;
-[e :U 158 ]
-[e = . . _SSPCON2bits 0 5 -> -> 1 `i `uc ]
-[e :U 159 ]
+[; ;I2C.c: 124:       SSPCON2bits.ACKDT = 0;
+[e = . . _SSPCON2bits 0 5 -> -> 0 `i `uc ]
 "125
-[; ;I2C.c: 125:     SSPCON2bits.ACKEN = 1;
-[e = . . _SSPCON2bits 0 4 -> -> 1 `i `uc ]
+[; ;I2C.c: 125:     }
+}
+[e $U 159  ]
 "126
-[; ;I2C.c: 126:     return Datos;
+[; ;I2C.c: 126:     else {
+[e :U 158 ]
+{
+"127
+[; ;I2C.c: 127:       SSPCON2bits.ACKDT = 1;
+[e = . . _SSPCON2bits 0 5 -> -> 1 `i `uc ]
+"128
+[; ;I2C.c: 128:     }
+}
+[e :U 159 ]
+"129
+[; ;I2C.c: 129:     SSPCON2bits.ACKEN = 1;
+[e = . . _SSPCON2bits 0 4 -> -> 1 `i `uc ]
+"130
+[; ;I2C.c: 130:     return Datos;
 [e ) _Datos ]
 [e $UE 157  ]
-"127
-[; ;I2C.c: 127: }
+"131
+[; ;I2C.c: 131: }
 [e :UE 157 ]
 }

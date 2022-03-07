@@ -78,3 +78,8 @@ void Config_USART(int baud_rate, int Freq){
     TXSTAbits.TXEN = 1;                                 // Transmisiones habilitadas
     PIE1bits.RCIE = 0;
 }
+
+void UART_Write(char data){
+  while(!TXIF);
+  TXREG = data;
+}
