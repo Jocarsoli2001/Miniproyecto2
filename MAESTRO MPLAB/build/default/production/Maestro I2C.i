@@ -2964,7 +2964,11 @@ void Config_USART(int baud_rate, int Freq);
 int Recibir_dato(int dato);
 void Mandar_dato(int dato);
 void UART_Write(char data);
+char UART_Read();
 # 40 "Maestro I2C.c" 2
+
+
+
 
 # 1 "./MPU.h" 1
 
@@ -2973,8 +2977,8 @@ void UART_Write(char data);
 # 3 "./MPU.h" 2
 # 53 "./MPU.h"
 void InitMPU6050();
-# 41 "Maestro I2C.c" 2
-# 55 "Maestro I2C.c"
+# 44 "Maestro I2C.c" 2
+# 59 "Maestro I2C.c"
 char Ax1 = 0;
 char Ax2 = 0;
 char Ay1 = 0;
@@ -3009,7 +3013,8 @@ char dec_z = 0;
 char cen_z = 0;
 
 
-char dato = 0;
+char dato1 = 3;
+char dato = 1;
 char estado_sem = 0;
 int bandera = 1;
 
@@ -3024,7 +3029,6 @@ void divisor_dec(int b, char dig1[]);
 void __attribute__((picinterrupt(("")))) isr(void){
     if(PIR1bits.RCIF){
         dato = RCREG;
-
     }
 
 }
@@ -3043,7 +3047,7 @@ void main(void) {
 
         I2C_Master_Start(Repeated);
         I2CMasterWrite(0b11010010 +1);
-# 134 "Maestro I2C.c"
+# 138 "Maestro I2C.c"
         Ax1 = I2CMasterRead(ACK); Ax2 = I2CMasterRead(ACK);
         Ay1 = I2CMasterRead(ACK); Ay2 = I2CMasterRead(ACK);
         Az1 = I2CMasterRead(ACK); Az2 = I2CMasterRead(ACK);
@@ -3058,19 +3062,18 @@ void main(void) {
 
 
 
-        UART_Write(Gx1);
-        _delay((unsigned long)((20)*(8000000/4000.0)));
-
-
-
-
-
         I2C_Master_Start(Standard);
         I2CMasterWrite(0x50);
-        I2CMasterWrite(2);
+        I2CMasterWrite(dato1);
 
         I2CMasterStop();
 
+
+
+
+
+        UART_Write(Gx1);
+        _delay((unsigned long)((20)*(8000000/4000.0)));
 
 
 
@@ -3104,7 +3107,24 @@ void main(void) {
         Escribir_caracterLCD(cen_y);
         Escribir_caracterLCD(dec_y);
         Escribir_caracterLCD(uni_y);
-# 203 "Maestro I2C.c"
+
+        if(dato1 == 0){
+            set_cursor(2,13);
+            Escribir_stringLCD("Off");
+        }
+        else if(dato1 == 1){
+            set_cursor(2,13);
+            Escribir_stringLCD("R");
+        }
+        else if(dato1 == 2){
+            set_cursor(2,13);
+            Escribir_stringLCD("A");
+        }
+        else if(dato1 == 3){
+            set_cursor(2,13);
+            Escribir_stringLCD("V");
+        }
+
     }
 }
 
@@ -3132,7 +3152,6 @@ void setup(void){
 
 
 
-
     InitMPU6050();
 
 
@@ -3147,6 +3166,12 @@ void setup(void){
 
 
     Config_USART(9600,4);
+
+
+    PIR1bits.RCIF = 0;
+    PIE1bits.RCIE = 1;
+    INTCONbits.PEIE = 1;
+    INTCONbits.GIE = 1;
 
 }
 

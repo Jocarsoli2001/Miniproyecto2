@@ -83,3 +83,8 @@ void UART_Write(char data){
   while(!TXIF);
   TXREG = data;
 }
+
+char UART_Read(){
+  while(!RCIF);
+  return RCREG;
+}

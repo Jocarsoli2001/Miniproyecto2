@@ -649,8 +649,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;Periferico I2C.c: 141:     PORTC = 0;
 [e = _PORTC -> -> 0 `i `uc ]
 "144
-[; ;Periferico I2C.c: 144:     initOsc(8);
-[e ( _initOsc (1 -> -> 8 `i `uc ]
+[; ;Periferico I2C.c: 144:     initOsc(4);
+[e ( _initOsc (1 -> -> 4 `i `uc ]
 "148
 [; ;Periferico I2C.c: 148:     InitMSSP(I2C_SLAVE_7BIT, 0x50);
 [e ( _InitMSSP (2 , . `E1557 6 -> -> -> 80 `i `l `ul ]

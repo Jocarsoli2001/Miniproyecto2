@@ -38,7 +38,11 @@
 #include "LCD.h"
 #include "Oscilador.h"
 #include "UART.h"
-#include "MPU.h"
+
+// Generada en base a librería de los sitios: https://deepbluembedded.com/mpu6050-with-microchip-pic-accelerometer-gyroscope-interfacing-with-pic/
+// y el sitio: https://microcontrollerslab.com/mpu6050-sensor-module-pinout-interfacing-with-pic-microcontroller/
+#include "MPU.h"                                    
+
 
 //-----------------Definición de frecuencia de cristal---------------
 #define _XTAL_FREQ 8000000
@@ -86,7 +90,8 @@ char dec_z = 0;
 char cen_z = 0;
 
 // Variables para semáforo
-char dato = 0;
+char dato1 = 3;
+char dato = 1;
 char estado_sem = 0;
 int bandera = 1;
 
@@ -101,7 +106,6 @@ void divisor_dec(int b, char dig1[]);                       // Función para divi
 void __interrupt() isr(void){
     if(PIR1bits.RCIF){
         dato = RCREG;
-        
     }
     
 }
@@ -142,22 +146,21 @@ void main(void) {
         I2CMasterStop();                                    // Fin del "burst read" o lectura continua
         
         //---------------------------------------------------------------------- 
-        // ENVIO DE VALORES A USART
-        //----------------------------------------------------------------------
-        
-        UART_Write(Gx1);                                  // Mandar valor de giroscopio en x
-        __delay_ms(20);
-        
-        //---------------------------------------------------------------------- 
         // ESTADO DE SEMAFORO EN PIC PERIFÉRICO
         //----------------------------------------------------------------------
 //        
         I2C_Master_Start(Standard);                         // Inicio de lectura continua
         I2CMasterWrite(PIC_esclavo);                        // Slave: PIC | Operación: Read 
-        I2CMasterWrite(Amarillo);
+        I2CMasterWrite(dato1);
 
         I2CMasterStop();                                    // Detener la lectura en I2C
         
+        //---------------------------------------------------------------------- 
+        // ENVIO DE VALORES A USART
+        //----------------------------------------------------------------------
+        
+        UART_Write(Gx1);                                    // Mandar valor de giroscopio en x
+        __delay_ms(20);
         
         //---------------------------------------------------------------------- 
         // IMPRIMIR VALORES A LCD
@@ -192,14 +195,23 @@ void main(void) {
         Escribir_caracterLCD(dec_y);
         Escribir_caracterLCD(uni_y);
         
-//        if(estado_sem == 1){
-//            set_cursor(2,13);
-//            Escribir_stringLCD("R");
-//        }
-//        if(estado_sem == 2){
-//            set_cursor(2,13);
-//            Escribir_stringLCD("A");
-//        }
+        if(dato1 == 0){
+            set_cursor(2,13);
+            Escribir_stringLCD("Off");
+        }
+        else if(dato1 == 1){
+            set_cursor(2,13);
+            Escribir_stringLCD("R");
+        }
+        else if(dato1 == 2){
+            set_cursor(2,13);
+            Escribir_stringLCD("A");
+        }
+        else if(dato1 == 3){
+            set_cursor(2,13);
+            Escribir_stringLCD("V");
+        }
+        
     }
 }
 
@@ -225,7 +237,6 @@ void setup(void){
     // Frecuencia de Transmisión: 100 kHz
     InitMSSP(I2C_MASTER_FOSC, 100000);
     
-//    I2C_Master_Init(100000);
     
     //Inicialización y configuración de MPU6065
     InitMPU6050();
@@ -242,6 +253,12 @@ void setup(void){
     
     //Configuración de TX y RX
     Config_USART(9600,4);
+    
+    //Configuración de interrupciones
+    PIR1bits.RCIF = 0;
+    PIE1bits.RCIE = 1;
+    INTCONbits.PEIE = 1;                            // Interrupciones periféricas activadas
+    INTCONbits.GIE = 1;                             // Habilitar interrupciones globales   
     
 }
 

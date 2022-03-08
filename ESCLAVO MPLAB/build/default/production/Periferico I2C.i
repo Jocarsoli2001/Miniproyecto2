@@ -3037,7 +3037,7 @@ void setup(void){
     PORTC = 0;
 
 
-    initOsc(8);
+    initOsc(4);
 
 
 

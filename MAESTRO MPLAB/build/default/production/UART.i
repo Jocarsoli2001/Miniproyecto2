@@ -2504,6 +2504,7 @@ void Config_USART(int baud_rate, int Freq);
 int Recibir_dato(int dato);
 void Mandar_dato(int dato);
 void UART_Write(char data);
+char UART_Read();
 # 11 "UART.c" 2
 
 
@@ -2579,4 +2580,9 @@ void Config_USART(int baud_rate, int Freq){
 void UART_Write(char data){
   while(!TXIF);
   TXREG = data;
+}
+
+char UART_Read(){
+  while(!RCIF);
+  return RCREG;
 }
